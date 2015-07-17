@@ -1,5 +1,5 @@
 require 'rongcloud/version'
+require 'rongcloud/configuration'
 
-module Rongcloud
-  # Your code goes here...
+module Rongcloud  #:nodoc:
 end
