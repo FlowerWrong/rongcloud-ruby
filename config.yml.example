@@ -1,6 +1,4 @@
 rongcloud:
   app_key: app_key
   app_secret: app_secret
-  host: 'https://a1.easemob.com'
-  org_name: org_name
-  app_name: app_name
+  host: 'https://api.cn.ronghub.com'

@@ -16,11 +16,13 @@ module Rongcloud
 
   class Configuration  #:nodoc:
     include ActiveSupport::Configurable
-    config_accessor :app_key
+    config_accessor :app_key, :app_secret, :host
   end
 
   # this is ugly. why can't we pass the default value to config_accessor...?
   configure do |config|
     config.app_key = ''
+    config.app_secret = ''
+    config.host = 'https://api.cn.ronghub.com'
   end
 end
