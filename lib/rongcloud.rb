@@ -1,5 +1,7 @@
 require 'rongcloud/version'
 require 'rongcloud/configuration'
+require 'rongcloud/sign'
+require 'rongcloud/service'
 
 module Rongcloud  #:nodoc:
   module_function

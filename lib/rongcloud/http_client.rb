@@ -46,7 +46,7 @@ class HttpClient
   def base_put_post_request(method_klass, url, params, header)
     uri = URI.parse(url)
     req = method_klass.new(uri)
-    req.content_type = 'application/json'
+    # req.content_type = 'application/json'
     req.body = params.to_json unless params.nil?
     init_header_and_return(uri, req, header)
   end
