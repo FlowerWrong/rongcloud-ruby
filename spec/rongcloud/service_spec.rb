@@ -106,6 +106,56 @@ describe Rongcloud::Service do
 
   ## 同步消息
   context 'sync msg' do
+    it 'should sync msg' do
+      pending 'Need to test sync msg'
+      fail
+    end
+  end
 
+  ## 消息历史记录服务
+  context 'msg history download and delete' do
+    it 'should download msg history of date' do
+      pending 'Need to test download msg history of date'
+      fail
+    end
+
+    it 'should delete msg history of date' do
+      pending 'Need to test delete msg history of date'
+      fail
+    end
+  end
+
+  ## 群组服务
+  context 'group' do
+    it 'should create a group' do
+      res_hash = @service.create_group('yang', 'testgroup', 'a_test_demo_group')
+      expect(res_hash[:code]).to eq(200)
+    end
+
+    it 'should add user to a group' do
+      res_hash = @service.add_group('yang_two', 'testgroup', 'a_test_demo_group')
+      expect(res_hash[:code]).to eq(200)
+    end
+
+    it 'should refresh a group' do
+      res_hash = @service.refresh_group('testgroup', 'a_test_demo_group_refresh')
+      expect(res_hash[:code]).to eq(200)
+    end
+
+    it 'should sync a group' do
+      groups = { 'testgroup' => 'a_test_demo_group_refresh' }
+      res_hash = @service.sync_group('yang', groups)
+      expect(res_hash[:code]).to eq(200)
+    end
+
+    it 'should quit a group' do
+      res_hash = @service.out_group('yang_two', 'testgroup')
+      expect(res_hash[:code]).to eq(200)
+    end
+
+    it 'should dismiss a group' do
+      res_hash = @service.dismiss_group('yang_two', 'testgroup')
+      expect(res_hash[:code]).to eq(200)
+    end
   end
 end

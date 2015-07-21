@@ -28,11 +28,9 @@ module Rongcloud
     # 刷新用户信息
     def refresh_user(user_id, name = nil, portrait_uri = nil)
       url = "#{@host}/user/refresh.json"
-      params = {
-        userId: user_id,
-        name: name,
-        portraitUri: portrait_uri
-      }
+      params = { userId: user_id }
+      params.merge!({ name: name }) unless name.nil?
+      params.merge!({ portraitUri: portrait_uri }) unless portrait_uri.nil?
       res = RestClient.post url, params, @sign_header
       be_symbolized(res)
     end
@@ -111,9 +109,9 @@ module Rongcloud
         objectName: msg_type,
         content: content.to_json
       }
-      params.merge! push_content unless push_content.nil?
-      params.merge! push_data unless push_data.nil?
-      params.merge! count unless count.nil?
+      params.merge!({ pushContent: push_content }) unless push_content.nil?
+      params.merge!({ pushData: push_data }) unless push_data.nil?
+      params.merge!({ count: count }) unless count.nil?
       res = RestClient.post url, params, @sign_header
       be_symbolized res
     end
@@ -144,8 +142,8 @@ module Rongcloud
         objectName: msg_type,
         content: content.to_json
       }
-      params.merge! push_content unless push_content.nil?
-      params.merge! push_data unless push_data.nil?
+      params.merge!({ pushContent: push_content }) unless push_content.nil?
+      params.merge!({ pushData: push_data }) unless push_data.nil?
       res = RestClient.post url, params, @sign_header
       be_symbolized res
     end
@@ -159,8 +157,8 @@ module Rongcloud
         objectName: msg_type,
         content: content.to_json
       }
-      params.merge! push_content unless push_content.nil?
-      params.merge! push_data unless push_data.nil?
+      params.merge!({ pushContent: push_content }) unless push_content.nil?
+      params.merge!({ pushData: push_data }) unless push_data.nil?
       res = RestClient.post url, params, @sign_header
       be_symbolized res
     end
@@ -186,14 +184,87 @@ module Rongcloud
         objectName: msg_type,
         content: content.to_json
       }
-      params.merge! push_content unless push_content.nil?
-      params.merge! push_data unless push_data.nil?
+      params.merge!({ pushContent: push_content }) unless push_content.nil?
+      params.merge!({ pushData: push_data }) unless push_data.nil?
       res = RestClient.post url, params, @sign_header
       be_symbolized res
     end
 
     ## 消息路由服务
+    # 同步消息
+    # FIXME
+    def sync_msg(from_uid, to_uid, msg_type, content, timestamp, channel_type, msg_timestamp)
+    end
 
+    ## 消息历史记录服务
+    # 消息历史记录下载地址获取
+    # date = '2014010101'
+    def msg_history_download(date)
+      url = "#{@host}/message/history.json"
+      params = { date: date }
+      res = RestClient.post url, params, @sign_header
+      be_symbolized res
+    end
+
+    # 消息历史记录删除
+    # date = '2014010101'
+    def msg_history_del(date)
+      url = "#{@host}/message/history/delete.json"
+      params = { date: date }
+      res = RestClient.post url, params, @sign_header
+      be_symbolized res
+    end
+
+    ## 群组服务
+    # 同步用户所属群组
+    def sync_group(user_id, groups)
+      url = "#{@host}/group/sync.json"
+      params = { userId: user_id, group: groups.to_json }
+      res = RestClient.post url, params, @sign_header
+      be_symbolized res
+    end
+
+    # 创建群组
+    def create_group(user_id, group_id, name = nil)
+      url = "#{@host}/group/create.json"
+      params = { userId: user_id, groupId: group_id }
+      params.merge!({ groupName: name }) unless name.nil?
+      res = RestClient.post url, params, @sign_header
+      be_symbolized res
+    end
+
+    # 加入群组
+    def add_group(user_id, group_id, name = nil)
+      url = "#{@host}/group/join.json"
+      params = { userId: user_id, groupId: group_id }
+      params.merge!({ groupName: name }) unless name.nil?
+      res = RestClient.post url, params, @sign_header
+      be_symbolized res
+    end
+
+    # 退出群组
+    def out_group(user_id, group_id)
+      url = "#{@host}/group/quit.json"
+      params = { userId: user_id, groupId: group_id }
+      res = RestClient.post url, params, @sign_header
+      be_symbolized res
+    end
+
+    # 解散群组
+    def dismiss_group(user_id, group_id)
+      url = "#{@host}/group/dismiss.json"
+      params = { userId: user_id, groupId: group_id }
+      res = RestClient.post url, params, @sign_header
+      be_symbolized res
+    end
+
+    # 刷新群组信息
+    def refresh_group(group_id, name)
+      url = "#{@host}/group/refresh.json"
+      params = { groupId: group_id, groupName: name }
+      res = RestClient.post url, params, @sign_header
+      be_symbolized res
+    end
 
     private
 
