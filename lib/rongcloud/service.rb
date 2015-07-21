@@ -1,6 +1,7 @@
-require_relative 'http_client'
 require 'json'
 require 'active_support/core_ext/hash/keys'
+require 'rest-client'
+require 'symbolized'
 
 module Rongcloud
   class Service
@@ -9,7 +10,6 @@ module Rongcloud
       @app_secret = Rongcloud.config.app_secret
       @host = Rongcloud.config.host
       @sign_header = Rongcloud::Sign.sign_headers(@app_key, @app_secret)
-      @http_client = HttpClient.new
     end
 
     ## 用户服务
@@ -17,22 +17,22 @@ module Rongcloud
     def get_token(user_id, name = nil, portrait_uri = nil)
       url = "#{@host}/user/getToken.json"
       params = {
-        'userId' => user_id,
-        'name' => name,
-        'portraitUri' => portrait_uri
+        userId: user_id,
+        name: name,
+        portraitUri: portrait_uri
       }
-      uri, req = @http_client.post_request(url, params, @sign_header)
-      http_submit(uri, req)
+      res = RestClient.post url, params, @sign_header
+      be_symbolized(res)
     end
 
     private
 
-    def http_submit(uri, req)
-      res = @http_client.submit(uri, req)
-      res_hash = JSON.parse res.body
-      p res_hash
-      res_hash = res_hash.kind_of?(Array) ? res_hash.map(&:deep_symbolize_keys!) : res_hash.deep_symbolize_keys!
+    def be_symbolized(res)
+      res_hash = JSON.parse res
+      res_hash = res_hash.to_symbolized_hash
+      # res_hash = res_hash.kind_of?(Array) ? res_hash.map(&:deep_symbolize_keys!) : res_hash.deep_symbolize_keys!
       res_hash[:http_code] = res.code
+      res_hash
     end
 
     def http_status

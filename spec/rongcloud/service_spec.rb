@@ -15,7 +15,9 @@ describe Rongcloud::Service do
   end
 
   it 'should get token of yang' do
-    res = @service.get_token('yang', 'yangfusheng', 'https://ruby-china-files.b0.upaiyun.com/user/big_avatar/9442.jpg')
-    expect(res[:http_code]).to eq(200)
+    res_hash = @service.get_token('yang', 'yangfusheng', 'https://ruby-china-files.b0.upaiyun.com/user/big_avatar/9442.jpg')
+    expect(res_hash[:code]).to eq(200)
+    expect(res_hash[:token].size).to eq(88)
+    expect(res_hash[:userId]).to eq('yang')
   end
 end
