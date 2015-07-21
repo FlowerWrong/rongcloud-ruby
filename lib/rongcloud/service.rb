@@ -25,6 +25,176 @@ module Rongcloud
       be_symbolized(res)
     end
 
+    # 刷新用户信息
+    def refresh_user(user_id, name = nil, portrait_uri = nil)
+      url = "#{@host}/user/refresh.json"
+      params = {
+        userId: user_id,
+        name: name,
+        portraitUri: portrait_uri
+      }
+      res = RestClient.post url, params, @sign_header
+      be_symbolized(res)
+    end
+
+    # 检查用户在线状态
+    def online_status(user_id)
+      url = "#{@host}/user/checkOnline.json"
+      params = { userId: user_id }
+      res = RestClient.post url, params, @sign_header
+      be_symbolized(res)
+    end
+
+    ## 用户封禁服务
+    # 封禁用户
+    def block_user(user_id, minute = 60)
+      url = "#{@host}/user/block.json"
+      params = { userId: user_id, minute: minute }
+      res = RestClient.post url, params, @sign_header
+      be_symbolized(res)
+    end
+
+    # 获取被封禁用户
+    def block_users
+      url = "#{@host}/user/block/query.json"
+      params = {}
+      res = RestClient.post url, params, @sign_header
+      be_symbolized(res)
+    end
+
+    # 解除用户封禁
+    def unblock_user(user_id)
+      url = "#{@host}/user/unblock.json"
+      params = { userId: user_id }
+      res = RestClient.post url, params, @sign_header
+      be_symbolized(res)
+    end
+
+    ## 用户黑名单服务
+    # 添加用户到黑名单
+    def add_black(user_id, black_user_id)
+      url = "#{@host}/user/blacklist/add.json"
+      params = {
+        userId: user_id,
+        blackUserId: black_user_id
+      }
+      res = RestClient.post url, params, @sign_header
+      be_symbolized res
+    end
+
+    # 获取某用户的黑名单列表
+    def blacklist(user_id)
+      url = "#{@host}/user/blacklist/query.json"
+      params = { userId: user_id }
+      res = RestClient.post url, params, @sign_header
+      be_symbolized res
+    end
+
+    # 从黑名单中移除用户
+    def remove_black(user_id, black_user_id)
+      url = "#{@host}/user/blacklist/remove.json"
+      params = {
+        userId: user_id,
+        blackUserId: black_user_id
+      }
+      res = RestClient.post url, params, @sign_header
+      be_symbolized res
+    end
+
+    ## 消息发送服务
+    # 发送单聊消息
+    def send_private_msg(from_uid, to_uid, msg_type, content, push_content = nil, push_data = nil, count = nil)
+      url = "#{@host}/message/private/publish.json"
+      params = {
+        fromUserId: from_uid,
+        toUserId: to_uid,
+        objectName: msg_type,
+        content: content.to_json
+      }
+      params.merge! push_content unless push_content.nil?
+      params.merge! push_data unless push_data.nil?
+      params.merge! count unless count.nil?
+      res = RestClient.post url, params, @sign_header
+      be_symbolized res
+    end
+
+    # 发送模板消息
+    # NO TEST
+    def send_template_msg(from_uid, to_uid, msg_type, values, content, push_content, push_data)
+      url = "#{@host}/message/private/publish_template.json"
+      params = {
+        fromUserId: from_uid,
+        toUserId: to_uid,
+        objectName: msg_type,
+        values: values,
+        content: content.to_json,
+        pushContent: push_content,
+        pushData: push_data
+      }
+      res = RestClient.post url, params, @sign_header
+      be_symbolized res
+    end
+
+    # 发送系统消息
+    def send_sys_msg(from_uid, to_uid, msg_type, content, push_content = nil, push_data = nil)
+      url = "#{@host}/message/system/publish.json"
+      params = {
+        fromUserId: from_uid,
+        toUserId: to_uid,
+        objectName: msg_type,
+        content: content.to_json
+      }
+      params.merge! push_content unless push_content.nil?
+      params.merge! push_data unless push_data.nil?
+      res = RestClient.post url, params, @sign_header
+      be_symbolized res
+    end
+
+    # 发送群组消息
+    def send_group_msg(from_uid, to_uid, msg_type, content, push_content = nil, push_data = nil)
+      url = "#{@host}/message/group/publish.json"
+      params = {
+        fromUserId: from_uid,
+        toUserId: to_uid,
+        objectName: msg_type,
+        content: content.to_json
+      }
+      params.merge! push_content unless push_content.nil?
+      params.merge! push_data unless push_data.nil?
+      res = RestClient.post url, params, @sign_header
+      be_symbolized res
+    end
+
+    # 发送聊天室消息
+    def send_chatroom_msg(from_uid, to_uid, msg_type, content)
+      url = "#{@host}/message/chatroom/publish.json"
+      params = {
+        fromUserId: from_uid,
+        toUserId: to_uid,
+        objectName: msg_type,
+        content: content.to_json
+      }
+      res = RestClient.post url, params, @sign_header
+      be_symbolized res
+    end
+
+    # 发送广播消息
+    def send_broadcast_msg(from_uid, msg_type, content, push_content = nil, push_data = nil)
+      url = "#{@host}/message/broadcast.json"
+      params = {
+        fromUserId: from_uid,
+        objectName: msg_type,
+        content: content.to_json
+      }
+      params.merge! push_content unless push_content.nil?
+      params.merge! push_data unless push_data.nil?
+      res = RestClient.post url, params, @sign_header
+      be_symbolized res
+    end
+
+    ## 消息路由服务
+
+
     private
 
     def be_symbolized(res)
