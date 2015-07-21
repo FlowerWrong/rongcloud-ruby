@@ -7,7 +7,7 @@
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'rongcloud'
+gem 'rongcloud', github: 'FlowerWrong/rongcloud-ruby'
 ```
 
 And then execute:
@@ -24,6 +24,14 @@ Rongcloud.configure do |config|
 end
 $service = Rongcloud::Service.new
 $service.get_token('yang', 'yangfusheng', 'https://ruby-china-files.b0.upaiyun.com/user/big_avatar/9442.jpg')
+```
+
+## Rspec
+
+```ruby
+cp config.yml.example config.yml
+# edit it
+rake spec
 ```
 
 ## Development
