@@ -266,6 +266,40 @@ module Rongcloud
       be_symbolized res
     end
 
+    ## 聊天室服务
+    # 创建聊天室
+    # {id: name, id: name}
+    def create_chatroom(chatroom = {})
+      url = "#{@host}/chatroom/create.json"
+      params = { chatroom: chatroom }
+      res = RestClient.post url, params, @sign_header
+      be_symbolized res
+    end
+
+    # 查询聊天室信息
+    def chatroom_info(chatroom_id)
+      url = "#{@host}/chatroom/query.json"
+      params = { chatroomId: chatroom_id }
+      res = RestClient.post url, params, @sign_header
+      be_symbolized res
+    end
+
+    # 查询聊天室内用户
+    def chatroom_users(chatroom_id)
+      url = "#{@host}/chatroom/user/query.json"
+      params = { chatroomId: chatroom_id }
+      res = RestClient.post url, params, @sign_header
+      be_symbolized res
+    end
+
+    # 销毁聊天室
+    def destroy_chatroom(chatroom_id)
+      url = "#{@host}/chatroom/destroy.json"
+      params = { chatroomId: chatroom_id }
+      res = RestClient.post url, params, @sign_header
+      be_symbolized res
+    end
+
     private
 
     def be_symbolized(res)

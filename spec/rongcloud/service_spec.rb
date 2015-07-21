@@ -158,4 +158,31 @@ describe Rongcloud::Service do
       expect(res_hash[:code]).to eq(200)
     end
   end
+
+  ## 聊天室服务
+  context 'chatroom' do
+    it 'should create a chatroom' do
+      chatroom = { 'demo' => 'demo', 'testchat' => 'testchat' }
+      res_hash = @service.create_chatroom(chatroom)
+      expect(res_hash[:code]).to eq(200)
+    end
+
+    it 'should query a chatroom info' do
+      res_hash = @service.chatroom_info('demo')
+      expect(res_hash[:code]).to eq(200)
+      expect(res_hash[:chatRooms].kind_of?(Array)).to eq(true)
+      expect(res_hash[:chatRooms][0][:chrmId]).to eq('demo')
+    end
+
+    it 'should query a chatroom users' do
+      res_hash = @service.chatroom_users('demo')
+      expect(res_hash[:users].kind_of?(Array)).to eq(true)
+      expect(res_hash[:code]).to eq(200)
+    end
+
+    it 'should destroy a chatroom' do
+      res_hash = @service.destroy_chatroom('demo')
+      expect(res_hash[:code]).to eq(200)
+    end
+  end
 end
