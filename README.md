@@ -16,7 +16,15 @@ And then execute:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+Rongcloud.configure do |config|
+  config.app_key = ''
+  config.app_secret = ''
+  config.host = ''
+end
+$service = Rongcloud::Service.new
+$service.get_token('yang', 'yangfusheng', 'https://ruby-china-files.b0.upaiyun.com/user/big_avatar/9442.jpg')
+```
 
 ## Development
 
@@ -26,7 +34,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/rongcloud. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/FlowerWrong/rongcloud. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
 
 
 ## License
