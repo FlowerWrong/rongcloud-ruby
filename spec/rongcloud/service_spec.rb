@@ -184,5 +184,12 @@ describe Rongcloud::Service do
       res_hash = @service.destroy_chatroom('demo')
       expect(res_hash[:code]).to eq(200)
     end
+
+    it 'should destroy some chatroom' do
+      @service.create_chatroom({ 'demo' => 'demo', 'testchat' => 'testchat', 'google' => 'google' })
+      room = ['demo', 'google']
+      res_hash = @service.destroy_chatroom(room)
+      expect(res_hash[:code]).to eq(200)
+    end
   end
 end

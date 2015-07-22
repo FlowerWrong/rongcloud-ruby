@@ -293,10 +293,22 @@ module Rongcloud
     end
 
     # 销毁聊天室
+    # FIXME
+    # https://github.com/rest-client/rest-client/blob/master/spec/unit/payload_spec.rb#L53
+    # http://stackoverflow.com/questions/6436110/restclient-strips-out-the-array-of-hashes-parameter-with-just-the-last-hash
     def destroy_chatroom(chatroom_id)
       url = "#{@host}/chatroom/destroy.json"
-      params = { chatroomId: chatroom_id }
-      res = RestClient.post url, params, @sign_header
+      if chatroom_id.kind_of?(Array)
+        p 'There is bug for an array params, need to fix it'
+        params = { 'chatroomId' => chatroom_id }
+      else
+        params = { 'chatroomId' => chatroom_id }
+      end
+      begin
+        res = RestClient.post url, params, @sign_header
+      rescue => e
+        res = e.response
+      end
       be_symbolized res
     end
 
