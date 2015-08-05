@@ -20,8 +20,12 @@ module Rongcloud
         name: name,
         portraitUri: portrait_uri
       }
-      res = RestClient.post url, params, @sign_header
-      be_symbolized(res)
+      begin
+        res = RestClient.post url, params, @sign_header
+      rescue => e
+        res = e.response
+      end
+      be_symbolized res
     end
 
     # 刷新用户信息
@@ -314,10 +318,13 @@ module Rongcloud
     private
 
     def be_symbolized(res)
-      res_hash = JSON.parse res
-      # res_hash = res_hash.to_symbolized_hash
-      res_hash = res_hash.kind_of?(Array) ? res_hash.map(&:deep_symbolize_keys!) : res_hash.deep_symbolize_keys!
-      res_hash[:http_code] = res.code
+      begin
+        res_hash = JSON.parse res
+        res_hash = res_hash.kind_of?(Array) ? res_hash.map(&:deep_symbolize_keys!) : res_hash.deep_symbolize_keys!
+        res_hash[:http_code] = res.code
+      rescue => e
+        res_hash = e.response
+      end
       res_hash
     end
 
