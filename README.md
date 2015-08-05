@@ -12,13 +12,13 @@ gem 'rongcloud', github: 'FlowerWrong/rongcloud-ruby'
 
 And then execute:
 
-    $ bundle
+    $ bundle install
 
 ## Usage
 
 ```ruby
 # 基本配置
-rails_app/config/initializers/rongcloud.rb
+# rails_app/config/initializers/rongcloud.rb
 Rongcloud.configure do |config|
   config.app_key = ''
   config.app_secret = ''

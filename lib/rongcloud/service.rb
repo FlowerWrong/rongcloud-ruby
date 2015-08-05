@@ -1,7 +1,6 @@
 require 'json'
 require 'active_support/core_ext/hash/keys'
 require 'rest-client'
-require 'symbolized'
 
 module Rongcloud
   class Service
@@ -293,14 +292,14 @@ module Rongcloud
     end
 
     # 销毁聊天室
-    # FIXME
-    # https://github.com/rest-client/rest-client/blob/master/spec/unit/payload_spec.rb#L53
-    # http://stackoverflow.com/questions/6436110/restclient-strips-out-the-array-of-hashes-parameter-with-just-the-last-hash
     def destroy_chatroom(chatroom_id)
       url = "#{@host}/chatroom/destroy.json"
       if chatroom_id.kind_of?(Array)
-        p 'There is bug for an array params, need to fix it'
-        params = { 'chatroomId' => chatroom_id }
+        params = ''
+        chatroom_id.each do |cid|
+          params += "chatroomId=#{cid}&"
+        end
+        params = params.chop
       else
         params = { 'chatroomId' => chatroom_id }
       end
@@ -316,8 +315,8 @@ module Rongcloud
 
     def be_symbolized(res)
       res_hash = JSON.parse res
-      res_hash = res_hash.to_symbolized_hash
-      # res_hash = res_hash.kind_of?(Array) ? res_hash.map(&:deep_symbolize_keys!) : res_hash.deep_symbolize_keys!
+      # res_hash = res_hash.to_symbolized_hash
+      res_hash = res_hash.kind_of?(Array) ? res_hash.map(&:deep_symbolize_keys!) : res_hash.deep_symbolize_keys!
       res_hash[:http_code] = res.code
       res_hash
     end
