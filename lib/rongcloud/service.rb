@@ -1,6 +1,10 @@
 require 'json'
 require 'active_support/core_ext/hash/keys'
 require 'rest-client'
+require 'logging'
+
+$logger = Logging.logger(STDOUT)
+$logger.level = :warn
 
 module Rongcloud
   class Service
@@ -25,6 +29,7 @@ module Rongcloud
       rescue => e
         res = e.response
       end
+      $logger.warn "get_token response is #{res}"
       be_symbolized res
     end
 
@@ -34,7 +39,12 @@ module Rongcloud
       params = { userId: user_id }
       params.merge!({ name: name }) unless name.nil?
       params.merge!({ portraitUri: portrait_uri }) unless portrait_uri.nil?
-      res = RestClient.post url, params, @sign_header
+      begin
+        res = RestClient.post url, params, @sign_header
+      rescue => e
+        res = e.response
+      end
+      $logger.warn "refresh_user response is #{res}"
       be_symbolized(res)
     end
 
@@ -223,7 +233,12 @@ module Rongcloud
     def sync_group(user_id, groups)
       url = "#{@host}/group/sync.json"
       params = { userId: user_id, group: groups.to_json }
-      res = RestClient.post url, params, @sign_header
+      begin
+        res = RestClient.post url, params, @sign_header
+      rescue => e
+        res = e.response
+      end
+      $logger.warn "sync_group response is #{res}"
       be_symbolized res
     end
 
@@ -232,7 +247,12 @@ module Rongcloud
       url = "#{@host}/group/create.json"
       params = { userId: user_id, groupId: group_id }
       params.merge!({ groupName: name }) unless name.nil?
-      res = RestClient.post url, params, @sign_header
+      begin
+        res = RestClient.post url, params, @sign_header
+      rescue => e
+        res = e.response
+      end
+      $logger.warn "create_group response is #{res}"
       be_symbolized res
     end
 
@@ -241,7 +261,12 @@ module Rongcloud
       url = "#{@host}/group/join.json"
       params = { userId: user_id, groupId: group_id }
       params.merge!({ groupName: name }) unless name.nil?
-      res = RestClient.post url, params, @sign_header
+      begin
+        res = RestClient.post url, params, @sign_header
+      rescue => e
+        res = e.response
+      end
+      $logger.warn "add_group response is #{res}"
       be_symbolized res
     end
 
@@ -249,7 +274,12 @@ module Rongcloud
     def out_group(user_id, group_id)
       url = "#{@host}/group/quit.json"
       params = { userId: user_id, groupId: group_id }
-      res = RestClient.post url, params, @sign_header
+      begin
+        res = RestClient.post url, params, @sign_header
+      rescue => e
+        res = e.response
+      end
+      $logger.warn "out_group response is #{res}"
       be_symbolized res
     end
 
@@ -257,7 +287,12 @@ module Rongcloud
     def dismiss_group(user_id, group_id)
       url = "#{@host}/group/dismiss.json"
       params = { userId: user_id, groupId: group_id }
-      res = RestClient.post url, params, @sign_header
+      begin
+        res = RestClient.post url, params, @sign_header
+      rescue => e
+        res = e.response
+      end
+      $logger.warn "dismiss_group response is #{res}"
       be_symbolized res
     end
 
@@ -265,7 +300,12 @@ module Rongcloud
     def refresh_group(group_id, name)
       url = "#{@host}/group/refresh.json"
       params = { groupId: group_id, groupName: name }
-      res = RestClient.post url, params, @sign_header
+      begin
+        res = RestClient.post url, params, @sign_header
+      rescue => e
+        res = e.response
+      end
+      $logger.warn "refresh_group response is #{res}"
       be_symbolized res
     end
 
