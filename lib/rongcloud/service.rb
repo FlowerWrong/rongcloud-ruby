@@ -244,7 +244,7 @@ module Rongcloud
       rescue => e
         res = e.response.inspect
       end
-      $logger.warn "sync_group response is #{res}"
+      $logger.warn "#{Time.now} sync_group response is #{res}"
       be_symbolized res
     end
 
@@ -258,7 +258,7 @@ module Rongcloud
       rescue => e
         res = e.response.inspect
       end
-      $logger.warn "create_group response is #{res}"
+      $logger.warn "#{Time.now} create_group response is #{res}"
       be_symbolized res
     end
 
@@ -270,9 +270,10 @@ module Rongcloud
       begin
         res = RestClient.post url, params, @sign_header
       rescue => e
+        $logger.warn "#{Time.now} add_group exception is #{e}"
         res = e.response.inspect
       end
-      $logger.warn "add_group response is #{res}"
+      $logger.warn "#{Time.now} add_group response is #{res}"
       be_symbolized res
     end
 
@@ -285,7 +286,7 @@ module Rongcloud
       rescue => e
         res = e.response.inspect
       end
-      $logger.warn "out_group response is #{res}"
+      $logger.warn "#{Time.now} out_group response is #{res}"
       be_symbolized res
     end
 
@@ -296,9 +297,10 @@ module Rongcloud
       begin
         res = RestClient.post url, params, @sign_header
       rescue => e
+        $logger.warn "#{Time.now} dismiss_group exception is #{e}"
         res = e.response.inspect
       end
-      $logger.warn "dismiss_group response is #{res}"
+      $logger.warn "#{Time.now} dismiss_group response is #{res}"
       be_symbolized res
     end
 
@@ -311,7 +313,7 @@ module Rongcloud
       rescue => e
         res = e.response.inspect
       end
-      $logger.warn "refresh_group response is #{res}"
+      $logger.warn "#{Time.now} refresh_group response is #{res}"
       be_symbolized res
     end
 
