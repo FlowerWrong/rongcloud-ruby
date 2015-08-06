@@ -23,6 +23,8 @@ Rongcloud.configure do |config|
   config.app_key = ''
   config.app_secret = ''
   config.host = ''
+  config.log_level = :warn
+  config.log_file = "#{Rails.root}/log/rongcloud.log"
 end
 $service = Rongcloud::Service.new
 
