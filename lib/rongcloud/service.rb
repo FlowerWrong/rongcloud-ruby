@@ -28,7 +28,7 @@ module Rongcloud
       begin
         res = RestClient.post url, params, @sign_header
       rescue => e
-        res = e.response
+        res = e.response.inspect
       end
       $logger.warn "get_token response is #{res}"
       be_symbolized res
@@ -43,7 +43,7 @@ module Rongcloud
       begin
         res = RestClient.post url, params, @sign_header
       rescue => e
-        res = e.response
+        res = e.response.inspect
       end
       $logger.warn "refresh_user response is #{res}"
       be_symbolized(res)
@@ -200,7 +200,12 @@ module Rongcloud
       }
       params.merge!({ pushContent: push_content }) unless push_content.nil?
       params.merge!({ pushData: push_data }) unless push_data.nil?
-      res = RestClient.post url, params, @sign_header
+      begin
+        res = RestClient.post url, params, @sign_header
+      rescue => e
+        res = e.response.inspect
+      end
+      $logger.warn "send_broadcast_msg response is #{res}"
       be_symbolized res
     end
 
@@ -237,7 +242,7 @@ module Rongcloud
       begin
         res = RestClient.post url, params, @sign_header
       rescue => e
-        res = e.response
+        res = e.response.inspect
       end
       $logger.warn "sync_group response is #{res}"
       be_symbolized res
@@ -251,7 +256,7 @@ module Rongcloud
       begin
         res = RestClient.post url, params, @sign_header
       rescue => e
-        res = e.response
+        res = e.response.inspect
       end
       $logger.warn "create_group response is #{res}"
       be_symbolized res
@@ -265,7 +270,7 @@ module Rongcloud
       begin
         res = RestClient.post url, params, @sign_header
       rescue => e
-        res = e.response
+        res = e.response.inspect
       end
       $logger.warn "add_group response is #{res}"
       be_symbolized res
@@ -278,7 +283,7 @@ module Rongcloud
       begin
         res = RestClient.post url, params, @sign_header
       rescue => e
-        res = e.response
+        res = e.response.inspect
       end
       $logger.warn "out_group response is #{res}"
       be_symbolized res
@@ -291,7 +296,7 @@ module Rongcloud
       begin
         res = RestClient.post url, params, @sign_header
       rescue => e
-        res = e.response
+        res = e.response.inspect
       end
       $logger.warn "dismiss_group response is #{res}"
       be_symbolized res
@@ -304,7 +309,7 @@ module Rongcloud
       begin
         res = RestClient.post url, params, @sign_header
       rescue => e
-        res = e.response
+        res = e.response.inspect
       end
       $logger.warn "refresh_group response is #{res}"
       be_symbolized res
@@ -351,7 +356,7 @@ module Rongcloud
       begin
         res = RestClient.post url, params, @sign_header
       rescue => e
-        res = e.response
+        res = e.response.inspect
       end
       be_symbolized res
     end
@@ -364,7 +369,9 @@ module Rongcloud
         res_hash = res_hash.kind_of?(Array) ? res_hash.map(&:deep_symbolize_keys!) : res_hash.deep_symbolize_keys!
         res_hash[:http_code] = res.code
       rescue => e
-        res_hash = e.response
+        res_hash = e.message
+        $logger.warn "be_symbolized res is #{res}"
+        $logger.warn "be_symbolized exception is #{e}"
       end
       res_hash
     end

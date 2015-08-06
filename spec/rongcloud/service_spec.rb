@@ -139,6 +139,11 @@ describe Rongcloud::Service do
       expect(res_hash[:code]).to eq(200)
     end
 
+    it 'should not add user to a group with 400' do
+      res_hash = @service.add_group('yang_two', nil)
+      expect(res_hash[:code]).to eq(200)
+    end
+
     it 'should refresh a group' do
       res_hash = @service.refresh_group('testgroup', 'a_test_demo_group_refresh')
       expect(res_hash[:code]).to eq(200)
