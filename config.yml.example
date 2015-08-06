@@ -2,3 +2,5 @@ rongcloud:
   app_key: app_key
   app_secret: app_secret
   host: 'https://api.cn.ronghub.com'
+  log_file: xxx/rongcloud.log
+  log_level: warn

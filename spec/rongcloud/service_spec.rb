@@ -10,6 +10,8 @@ describe Rongcloud::Service do
       config.app_key = @deault_config[:app_key]
       config.app_secret = @deault_config[:app_secret]
       config.host = @deault_config[:host]
+      config.log_file = @deault_config[:log_file]
+      config.log_level = @deault_config[:log_level].to_sym
     end
     @service = Rongcloud::Service.new
   end

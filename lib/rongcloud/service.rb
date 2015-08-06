@@ -3,9 +3,6 @@ require 'active_support/core_ext/hash/keys'
 require 'rest-client'
 require 'logging'
 
-$logger = Logging.logger(STDOUT)
-$logger.level = :warn
-
 module Rongcloud
   class Service
     def initialize
@@ -13,6 +10,10 @@ module Rongcloud
       @app_secret = Rongcloud.config.app_secret
       @host = Rongcloud.config.host
       @sign_header = Rongcloud::Sign.sign_headers(@app_key, @app_secret)
+
+      $logger = Logging.logger['rongcloud']
+      $logger.level = Rongcloud.config.log_level
+      $logger.add_appenders Logging.appenders.stdout, Logging.appenders.file(Rongcloud.config.log_file)
     end
 
     ## 用户服务
