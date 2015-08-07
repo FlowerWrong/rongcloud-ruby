@@ -6,14 +6,16 @@ require 'logging'
 module Rongcloud
   class Service
     def initialize
+      $logger = Logging.logger['rongcloud']
+      $logger.level = Rongcloud.config.log_level
+      $logger.add_appenders Logging.appenders.stdout, Logging.appenders.file(Rongcloud.config.log_file)
+
       @app_key = Rongcloud.config.app_key
       @app_secret = Rongcloud.config.app_secret
       @host = Rongcloud.config.host
       @sign_header = Rongcloud::Sign.sign_headers(@app_key, @app_secret)
 
-      $logger = Logging.logger['rongcloud']
-      $logger.level = Rongcloud.config.log_level
-      $logger.add_appenders Logging.appenders.stdout, Logging.appenders.file(Rongcloud.config.log_file)
+      $logger.warn "a new rongcloud service is created, app key is #{@app_key}, app secret is #{@app_secret}, host is #{@host}, and sign header is #{@sign_header}"
     end
 
     ## 用户服务
@@ -267,12 +269,34 @@ module Rongcloud
       url = "#{@host}/group/join.json"
       params = { userId: user_id, groupId: group_id }
       params.merge!({ groupName: name }) unless name.nil?
-      begin
-        res = RestClient.post url, params, @sign_header
-      rescue => e
-        $logger.warn "#{Time.now} add_group exception is #{e}"
-        res = e.response.inspect
-      end
+      res = nil
+      RestClient.post(url, params, @sign_header){ |response, request, result, &block|
+        case response.code
+          when 200
+            $logger.warn "#{Time.now} add_group 200 is #{response}"
+            $logger.warn "#{Time.now} add_group 200 headers is #{response.headers}"
+            $logger.warn "#{Time.now} add_group 200 to_s is #{response.to_s}"
+            $logger.warn "#{Time.now} add_group 200 body is #{response.body}"
+            res = response
+          when 400
+            $logger.warn "#{Time.now} add_group exception is #{response}"
+            $logger.warn "#{Time.now} add_group exception headers is #{response.headers}"
+            $logger.warn "#{Time.now} add_group exception to_s is #{response.to_s}"
+            $logger.warn "#{Time.now} add_group exception body is #{response.body}"
+            res = response
+            # raise SomeCustomExceptionIfYouWant
+          else
+            response.return!(request, result, &block)
+        end
+      }
+
+      # begin
+      #   res = RestClient.post url, params, @sign_header
+      # rescue => e
+      #   $logger.warn "#{Time.now} add_group exception is #{e}"
+      #   $logger.warn "#{Time.now} add_group exception is #{e.response}"
+      #   res = e.response.inspect
+      # end
       $logger.warn "#{Time.now} add_group response is #{res}"
       be_symbolized res
     end
