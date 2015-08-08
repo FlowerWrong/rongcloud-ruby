@@ -28,8 +28,12 @@ module Rongcloud
         portraitUri: portrait_uri
       }
       $logger.warn "#{Time.now} get_token params is #{params}"
-      res = RestClient.post url, params, @sign_header
-      res = handle_res(res, action = 'get_token')
+      res = begin
+        RestClient.post url, params, @sign_header
+      rescue => e
+        e.response.body
+      end
+      # res = handle_res(res, action = 'get_token')
       $logger.warn "#{Time.now} get_token response is #{res}"
       be_symbolized res
     end
@@ -203,7 +207,7 @@ module Rongcloud
       begin
         res = RestClient.post url, params, @sign_header
       rescue => e
-        res = e.response.inspect
+        res = e.response.body
       end
       $logger.warn "#{Time.now} send_broadcast_msg response is #{res}"
       be_symbolized res
