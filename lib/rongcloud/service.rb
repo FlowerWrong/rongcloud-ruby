@@ -27,11 +27,9 @@ module Rongcloud
         name: name,
         portraitUri: portrait_uri
       }
-      begin
-        res = RestClient.post url, params, @sign_header
-      rescue => e
-        res = e.response.inspect
-      end
+      $logger.warn "#{Time.now} get_token params is #{params}"
+      res = RestClient.post url, params, @sign_header
+      res = handle_res(res, action = 'get_token')
       $logger.warn "#{Time.now} get_token response is #{res}"
       be_symbolized res
     end
@@ -388,6 +386,28 @@ module Rongcloud
     end
 
     private
+
+    def handle_res(response, action = 'rongcloud')
+      case response.code
+        when 200
+          response
+        when 400
+          $logger.warn "#{Time.now} Get #{action} by rest-client is wrong, msg is #{response}"
+          { status: 400, code: :bad_request, msg: response }
+        when 401
+          $logger.warn "#{Time.now} Get #{action} by rest-client is wrong, msg is #{response}"
+          { status: 401, code: :unauthorized, msg: response }
+        when 403
+          $logger.warn "#{Time.now} Get #{action} by rest-client is wrong, msg is #{response}"
+          { status: 403, code: :forbidden, msg: response }
+        when 404
+          $logger.warn "#{Time.now} Get #{action} by rest-client is wrong, msg is #{response}"
+          { status: 404, code: :not_found, msg: response }
+        else
+          $logger.warn "#{Time.now} Get #{action} by rest-client is wrong, msg is #{response}"
+          { status: 500, code: :internal_server_error, msg: response }
+      end
+    end
 
     def be_symbolized(res)
       begin
