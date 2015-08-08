@@ -15,7 +15,7 @@ module Rongcloud
       @host = Rongcloud.config.host
       @sign_header = Rongcloud::Sign.sign_headers(@app_key, @app_secret)
 
-      $logger.warn "a new rongcloud service is created, app key is #{@app_key}, app secret is #{@app_secret}, host is #{@host}, and sign header is #{@sign_header}"
+      $logger.warn "#{Time.now} a new rongcloud service is created, app key is #{@app_key}, app secret is #{@app_secret}, host is #{@host}, and sign header is #{@sign_header}"
     end
 
     ## 用户服务
@@ -32,7 +32,7 @@ module Rongcloud
       rescue => e
         res = e.response.inspect
       end
-      $logger.warn "get_token response is #{res}"
+      $logger.warn "#{Time.now} get_token response is #{res}"
       be_symbolized res
     end
 
@@ -47,7 +47,7 @@ module Rongcloud
       rescue => e
         res = e.response.inspect
       end
-      $logger.warn "refresh_user response is #{res}"
+      $logger.warn "#{Time.now} refresh_user response is #{res}"
       be_symbolized(res)
     end
 
@@ -207,7 +207,7 @@ module Rongcloud
       rescue => e
         res = e.response.inspect
       end
-      $logger.warn "send_broadcast_msg response is #{res}"
+      $logger.warn "#{Time.now} send_broadcast_msg response is #{res}"
       be_symbolized res
     end
 
@@ -396,8 +396,8 @@ module Rongcloud
         res_hash[:http_code] = res.code
       rescue => e
         res_hash = e.message
-        $logger.warn "be_symbolized res is #{res}"
-        $logger.warn "be_symbolized exception is #{e}"
+        $logger.warn "#{Time.now} be_symbolized res is #{res}"
+        $logger.warn "#{Time.now} be_symbolized exception is #{e}"
       end
       res_hash
     end
