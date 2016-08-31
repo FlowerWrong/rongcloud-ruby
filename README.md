@@ -2,6 +2,8 @@
 
 [融云](http://www.rongcloud.cn/) ruby sdk.
 
+## NOTE: This gem is expired, please check out new version at [Martin288/rongcloud-ruby](https://github.com/Martin288/rongcloud-ruby).
+
 ## Installation
 
 Add this line to your application's Gemfile:
